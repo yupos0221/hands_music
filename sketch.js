@@ -2,8 +2,10 @@ let capture;
 // webカメラのロードフラグ
 let videoDataLoaded = false;
 
-let startButton;
-let started = false;
+let viewButton;
+let handsButton;
+let onHandTracking = false;
+let onView = false;
 
 let handsfree;
 
@@ -23,9 +25,8 @@ let leftTrigger = [false, false, false, false];
 let rightTrigger = [false, false, false, false];
 
 function setup() {
-  // webカメラの映像を準備
   capture = createCapture(VIDEO);
-
+  // createCanvas(capture.width, capture.height);
   // 映像をロードできたらキャンバスの大きさを設定
   capture.elt.onloadeddata = function () {
     videoDataLoaded = true;
@@ -36,16 +37,21 @@ function setup() {
   // 映像を非表示化
   capture.hide();
 
-  startButton = createButton("Start!");
-  startButton.mousePressed(startClicked);
-  startButton.size(50, 50);
+  viewButton = createButton("View on");
+  viewButton.mousePressed(starCameraView);
+  viewButton.size(70, 30);
+
+  handsButton = createButton("track");
+  handsButton.mousePressed(startHandTracking);
+  handsButton.size(70, 30);
+
 
   // handsfreeのhandモデルを準備
   handsfree = new Handsfree({
     // showDebug: true,
     hands: true,
     // The maximum number of hands to detect [0 - 4]
-    maxNumHands: 2,
+    maxNumHands: 0,
 
     // Minimum confidence [0 - 1] for a hand to be considered detected
     minDetectionConfidence: 0.5,
@@ -56,35 +62,49 @@ function setup() {
   });
 
   // handsfreeを開始
+  handsfree.enablePlugins('browser');
   handsfree.start();
   
 }
 
 function draw() {
-  if(started){
+  if(onView){
     // 映像を左右反転させて表示
     push();
     translate(width, 0);
     scale(-1, 1);
     image(capture, 0, 0, width, height);
     pop();
+  }else{
+    background(128);
+  }
 
-    // 手の頂点を表示
+  // 手の頂点を表示
+  
+  if(onHandTracking){
     drawHands();
     playHandsSound();
   }
-
+  
 
 }
 
-function startClicked(){
-  if(started){
-    startButton.html("Start!!");
-    started = false;
+function starCameraView(){
+  if(onView){
+    viewButton.html("View on");
   }else{
-    startButton.html("Stop");
-    started = true;
+    viewButton.html("view off");
   }
+  onView = !onView;
+}
+
+function startHandTracking(){
+  if(onHandTracking){
+    handsButton.html("track");
+  }else{
+    handsButton.html("untrack");
+  }
+  onHandTracking = !onHandTracking;
 }
 
 function drawHands() {
@@ -161,3 +181,17 @@ function playHandsSound(){
   console.log(rightTrigger);
 
 }
+
+// function mouseClicked(){
+//   if(started){
+//       capture.pause();
+//   }else{
+//       capture.play();
+//   }
+//   started = !started;
+// }
+
+// // for mobile browser
+// function touchStarted(){
+//   onHandTracking = !onHandTracking;
+// }
