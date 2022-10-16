@@ -7,23 +7,23 @@ window.onload = function(){
 
 }
 
-window.addEventListener('mousedown', playSound);
-window.addEventListener('touchstart', playSound);
+// window.addEventListener('mousedown', playSound);
+// window.addEventListener('touchstart', playSound);
 
 
-function playSound(e) {
+// function playSound(e) {
   
-  // マウスのdata属性を取得
-  var key = e.target.dataset.key;
+//   // マウスのdata属性を取得
+//   var key = e.target.dataset.key;
   
-  // keyがundefinedなら処理を実行しない
-  if (typeof key === "undefined") return;  
+//   // keyがundefinedなら処理を実行しない
+//   if (typeof key === "undefined") return;  
   
-  // 音名を代入する
-  synth.triggerAttackRelease(key, '8n');
+//   // 音名を代入する
+//   synth.triggerAttackRelease(key, '8n');
     
-}
+// }
 
-function play(){
-  synth.triggerAttackRelease("C4", "4n");
-}
+// function play(){
+//   synth.triggerAttackRelease("C4", "4n");
+// }
