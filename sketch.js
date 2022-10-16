@@ -9,9 +9,15 @@ const circleSize = 12;
 const targetIndex = [4, 8, 12, 16, 20];
 const palette = ["#9b5de5", "#f15bb5", "#fee440", "#00bbf9", "#00f5d4"];
 
-const tones = ["C4", "D4", "E4", "F4"]
-let times = [Tone.now(),Tone.now(),Tone.now(),Tone.now()];
-let trigger = [false, false, false, false];
+// const tones = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
+const leftTones = ["C4", "D4", "E4", "F4"];
+const rightTones = ["G4", "A4", "B4", "C5"];
+// let times = [Tone.now(),Tone.now(),Tone.now(),Tone.now()];
+let leftTimes = [Tone.now(),Tone.now(),Tone.now(),Tone.now()];
+let rightTimes = [Tone.now(),Tone.now(),Tone.now(),Tone.now()];
+// let trigger = [false, false, false, false];
+let leftTrigger = [false, false, false, false];
+let rightTrigger = [false, false, false, false];
 
 function setup() {
   // webカメラの映像を準備
@@ -21,6 +27,7 @@ function setup() {
   capture.elt.onloadeddata = function () {
     videoDataLoaded = true;
     createCanvas(capture.width, capture.height);
+    // createCanvas(windowWidth, windowHeight);
   };
 
   // 映像を非表示化
@@ -106,52 +113,30 @@ function playHandsSound(){
   const rightHandPinch = hands.pinchState[1]
 
   let tone_array = [];
-  rightHandPinch.forEach((handPinch, index) => {
-    if (handPinch == "held" && !trigger[index]){
-      times[index] = Tone.now();
-      synth[index].triggerAttack(tones[index], times[index]);
-      trigger[index] = true;
-    }else if(handPinch == "released" && trigger[index]){
+  leftHandPinch.forEach((handPinch, index) => {
+    if (handPinch == "held" && !leftTrigger[index]){
+      leftTimes[index] = Tone.now();
+      leftSynth[index].triggerAttack(leftTones[index], leftTimes[index]);
+      leftTrigger[index] = true;
+    }else if(handPinch == "released" && leftTrigger[index]){
       // console.log("stop")
-      synth[index].triggerRelease()
-      trigger[index] = false;
+      leftSynth[index].triggerRelease()
+      leftTrigger[index] = false;
     }
   });
-  console.log(trigger)
 
-  
-
-  // console.log(rightHandPinch)
-  // start, held, released
-  // if (rightHandPinch[0] == "held" && !trigger[0]){
-  //   times[0] = Tone.now()
-  //   synth.triggerAttack(tones[0]);
-  //   // synth.triggerAttack(tones[0], times[0]);
-  //   trigger[0] = true;
-  //   console.log("play sound")
-  // }else if(rightHandPinch[0] == "released" && trigger[0]){
-  //   // now = Tone.now()
-  //   synth.triggerRelease()
-  //   // synth.triggerRelease(times[0])
-  //   trigger[0] = false;
-  //   console.log("stop")
-  // }else{
-  //   console.log(rightHandPinch[0], trigger[0])
-  // }
-
-  // if (rightHandPinch[1] == "held" && !trigger[1]){
-  //   times[1] = Tone.now()
-  //   synth.triggerAttack(tones[1], times[1]);
-  //   trigger[1] = true;
-  //   console.log("play sound")
-  // }else if(rightHandPinch[1] == "released" && trigger[1]){
-  //   // now = Tone.now()
-  //   synth.triggerAttackRelease(tones[1], times[1])
-    
-  //   trigger[1] = false;
-  //   console.log("stop")
-  // }else{
-  //   console.log(rightHandPinch[1], trigger[1])
-  // }
+  rightHandPinch.forEach((handPinch, index) => {
+    if (handPinch == "held" && !rightTrigger[index]){
+      rightTimes[index] = Tone.now();
+      rightSynth[index].triggerAttack(rightTones[index], rightTimes[index]);
+      rightTrigger[index] = true;
+    }else if(handPinch == "released" && rightTrigger[index]){
+      // console.log("stop")
+      rightSynth[index].triggerRelease()
+      rightTrigger[index] = false;
+    }
+  });
+  console.log(leftTrigger);
+  console.log(rightTrigger);
 
 }

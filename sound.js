@@ -1,7 +1,10 @@
 var synth = [];
 window.onload = function(){
   var context = new AudioContext();
-  synth = [new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster()]; 
+  // synth = [new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster()];
+  leftSynth = [new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster()]; 
+  rightSynth = [new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster(), new Tone.Synth().toMaster()];  
+
 }
 
 window.addEventListener('mousedown', playSound);
