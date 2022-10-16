@@ -2,6 +2,9 @@ let capture;
 // webカメラのロードフラグ
 let videoDataLoaded = false;
 
+let startButton;
+let started = false;
+
 let handsfree;
 
 const circleSize = 12;
@@ -33,6 +36,10 @@ function setup() {
   // 映像を非表示化
   capture.hide();
 
+  startButton = createButton("Start!");
+  startButton.mousePressed(startClicked);
+  startButton.size(50, 50);
+
   // handsfreeのhandモデルを準備
   handsfree = new Handsfree({
     // showDebug: true,
@@ -54,16 +61,30 @@ function setup() {
 }
 
 function draw() {
-  // 映像を左右反転させて表示
-  push();
-  translate(width, 0);
-  scale(-1, 1);
-  image(capture, 0, 0, width, height);
-  pop();
+  if(started){
+    // 映像を左右反転させて表示
+    push();
+    translate(width, 0);
+    scale(-1, 1);
+    image(capture, 0, 0, width, height);
+    pop();
 
-  // 手の頂点を表示
-  drawHands();
-  playHandsSound();
+    // 手の頂点を表示
+    drawHands();
+    playHandsSound();
+  }
+
+
+}
+
+function startClicked(){
+  if(started){
+    startButton.html("Start!!");
+    started = false;
+  }else{
+    startButton.html("Stop");
+    started = true;
+  }
 }
 
 function drawHands() {
