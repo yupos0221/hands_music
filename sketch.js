@@ -1,5 +1,6 @@
 let pWindowWidth;
-
+let orgWidth;
+let orgHeight;
 let capture;
 // webカメラのロードフラグ
 let videoDataLoaded = false;
@@ -51,10 +52,13 @@ function setup() {
   // 映像をロードできたらキャンバスの大きさを設定
   capture.elt.onloadeddata = function () {
     videoDataLoaded = true;
-    // createCanvas(capture.width, capture.height);
-    let canvas = createCanvas(windowWidth, windowHeight*0.9);
+    orgWidth = capture.width;
+    orgHeight = capture.height;
+    // let canvas = createCanvas(capture.width, capture.height*0.9);
+    let canvas = createCanvas(windowWidth, orgHeight * (windowWidth/orgWidth)*0.9);
+    // let canvas = createCanvas(windowWidth, windowHeight*0.9);
     pWindowWidth = windowWidth;
-    canvas.position(0, height/10);
+    canvas.position(0, windowHeight/10);
   };
 
   
@@ -160,7 +164,8 @@ function draw() {
 
 function updateView(){
   if(pWindowWidth != windowWidth){
-    resizeCanvas(windowWidth, windowHeight);
+    // resizeCanvas(windowWidth, windowHeight);
+    resizeCanvas(windowWidth, orgHeight * (windowWidth/orgWidth)*0.9);
     sizeButton = [windowWidth/10, windowHeight/10];
     buttonStart.size(sizeButton[0], sizeButton[1]-20);
     buttonStart.position(0, 5);
