@@ -1,3 +1,5 @@
+let pWindowWidth;
+
 let capture;
 // webカメラのロードフラグ
 let videoDataLoaded = false;
@@ -29,8 +31,9 @@ const note_colors = [{8:["C", "#4040ff"], 12:["D", "#ffa040"], 16:["E", "#ff00ff
                    ];
 
 // const tones = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
-const leftTones = ["C4", "D4", "E4", "F4"];
-const rightTones = ["G4", "A4", "B4", "C5"];
+const leftTones = [["C3", "D3", "E3", "F3"], ["C4", "D4", "E4", "F4"], ["C5", "D5", "E5", "F5"]];
+const rightTones = [["G3", "A3", "B3", "C4"], ["G4", "A4", "B4", "C5"], ["G5", "A5", "B5", "C6"]];
+let toneShift = [1,1];
 // let times = [Tone.now(),Tone.now(),Tone.now(),Tone.now()];
 let leftTimes = [Tone.now(),Tone.now(),Tone.now(),Tone.now()];
 let rightTimes = [Tone.now(),Tone.now(),Tone.now(),Tone.now()];
@@ -47,6 +50,7 @@ function setup() {
     videoDataLoaded = true;
     // createCanvas(capture.width, capture.height);
     let canvas = createCanvas(windowWidth, windowHeight*0.9);
+    pWindowWidth = windowWidth;
     canvas.position(0, height/10);
   };
 
@@ -126,6 +130,8 @@ function draw() {
   }else{
     background(128);
   }
+  line(0, height/3, width, height/3);
+  line(0, height*2/3, width, height*2/3);
 
   // 手の頂点を表示
   
@@ -133,8 +139,27 @@ function draw() {
     drawHands();
     playHandsSound();
   }
-  
 
+  updateView();
+}
+
+function updateView(){
+  if(pWindowWidth != windowWidth){
+    resizeCanvas(windowWidth, windowHeight);
+    sizeButton = [windowWidth/10, windowHeight/10];
+    buttonStart.size(sizeButton[0], sizeButton[1]-20);
+    buttonStart.position(0, 5);
+    buttonLoading.size(sizeButton[0], sizeButton[1]-20);
+    buttonLoading.position(0, 5);
+    buttonStop.size(sizeButton[0], sizeButton[1]-20);
+    buttonStop.position(0, 5);
+    buttonView.size(sizeButton[0], sizeButton[1]-20);
+    buttonView.position(sizeButton[0], 5);
+    buttonTrack.size(sizeButton[0], sizeButton[1]-20);
+    buttonTrack.position(sizeButton[0]*2, 5);
+    sliderVelocity.position(sizeButton[0]*3, sizeButton[1]/2-15);
+  }
+  pWindowWidth = windowWidth;
 }
 
 function starCameraView(){
@@ -208,6 +233,19 @@ function drawHands() {
           textStyle(BOLD);
           text(note_colors[label][landmarkIndex][0], width - landmark.x * width-textWidth(note_colors[label][landmarkIndex][0])/2, landmark.y * height+textWidth(note_colors[label][landmarkIndex][0])/2);
           break;
+        case 21:
+          let y = landmark.y*height;
+          print(landmark.y, y, height/3);
+          if(y < height/3){
+            toneShift[label] = 2;
+          }else if(y >= height/3 && y < height*2/3){
+            toneShift[label] = 1;
+          }else{
+            toneShift[label] = 0;
+          }
+          fill(color(255, 255, 255));
+          circle(width - landmark.x * width, landmark.y * height, circleSize);
+          break;
         default:
           fill(color(255, 255, 255));
           circle(width - landmark.x * width, landmark.y * height, circleSize);
@@ -235,7 +273,7 @@ function playHandsSound(){
   leftHandPinch.forEach((handPinch, index) => {
     if (handPinch == "held" && !leftTrigger[index]){
       leftTimes[index] = Tone.now();
-      leftSynth[index].triggerAttack(leftTones[index], leftTimes[index], velocity);
+      leftSynth[index].triggerAttack(leftTones[toneShift[0]][index], leftTimes[index], velocity);
       leftTrigger[index] = true;
     }else if(handPinch == "released" && leftTrigger[index]){
       // console.log("stop")
@@ -247,7 +285,7 @@ function playHandsSound(){
   rightHandPinch.forEach((handPinch, index) => {
     if (handPinch == "held" && !rightTrigger[index]){
       rightTimes[index] = Tone.now();
-      rightSynth[index].triggerAttack(rightTones[index], rightTimes[index], velocity);
+      rightSynth[index].triggerAttack(rightTones[toneShift[1]][index], rightTimes[index], velocity);
       rightTrigger[index] = true;
     }else if(handPinch == "released" && rightTrigger[index]){
       // console.log("stop")
