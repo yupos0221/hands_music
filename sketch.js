@@ -54,11 +54,12 @@ function setup() {
     videoDataLoaded = true;
     orgWidth = capture.width;
     orgHeight = capture.height;
-    // let canvas = createCanvas(capture.width, capture.height*0.9);
-    let canvas = createCanvas(windowWidth, orgHeight * (windowWidth/orgWidth)*0.9);
+    let canvas = createCanvas(capture.width, capture.height);
+    // let canvas = createCanvas(windowWidth, orgHeight * (windowWidth/orgWidth)*0.9);
+    // let canvas = createCanvas(window.innerWidth*(window.innerHeight/orgHeight), window.innerHeight*0.85);
     // let canvas = createCanvas(windowWidth, windowHeight*0.9);
     pWindowWidth = windowWidth;
-    canvas.position(0, windowHeight/10);
+    canvas.position(0, window.innerHeight/10);
   };
 
   
@@ -68,10 +69,10 @@ function setup() {
     // showDebug: true,
     hands: true,
     // The maximum number of hands to detect [0 - 4]
-    maxNumHands: 0,
+    maxNumHands: 2,
 
     // Minimum confidence [0 - 1] for a hand to be considered detected
-    minDetectionConfidence: 0.5,
+    minDetectionConfidence: 1.0,
 
     // Minimum confidence [0 - 1] for the landmark tracker to be considered detected
     // Higher values are more robust at the expense of higher latency
