@@ -5,7 +5,7 @@ let capture;
 // webカメラのロードフラグ
 let videoDataLoaded = false;
 
-let buttonStart;
+let buttonStop;
 let buttonLoading;
 let buttonStop;
 let buttonView;
@@ -86,39 +86,44 @@ function setup() {
   
   sizeButton = [windowWidth/10, windowHeight/10];
   textSize(20);
-  buttonStart = createButton('Start');
-  buttonStart.size(sizeButton[0], sizeButton[1]-20);
-  buttonStart.position(0, 5);
-  buttonStart.style("font-size: x-large");
-  buttonStart.class('handsfree-show-when-stopped');
-  buttonStart.class('handsfree-hide-when-loading');
-  buttonStart.mousePressed(() => handsfree.start());
+  buttonStop = createButton('Start');
+  buttonStop.size(sizeButton[0], sizeButton[1]-20);
+  buttonStop.position(0, 5);
+  buttonStop.style("font-size: x-large");
+  buttonStop.class('handsfree-show-when-stopped');
+  buttonStop.class('handsfree-hide-when-loading');
+  buttonStop.style("background", "#cc0000");
+  buttonStop.mousePressed(() => handsfree.start());
   
   buttonLoading = createButton('...loading...');
   buttonLoading.size(sizeButton[0], sizeButton[1]-20);
   buttonLoading.position(0, 5);
   buttonLoading.style("font-size: x-large");
   buttonLoading.class('handsfree-show-when-loading');
+  buttonLoading.style("background", "#cccc00");
 
   // Create a stop button
-  buttonStop = createButton('Stop');
-  buttonStop.size(sizeButton[0], sizeButton[1]-20);
-  buttonStop.position(0, 5);
-  buttonStop.style("font-size: x-large");
-  buttonStop.class('handsfree-show-when-started');
-  buttonStop.mousePressed(() => handsfree.stop());
+  buttonRunning = createButton('Stop');
+  buttonRunning.size(sizeButton[0], sizeButton[1]-20);
+  buttonRunning.position(0, 5);
+  buttonRunning.style("font-size: x-large");
+  buttonRunning.class('handsfree-show-when-started');
+  buttonRunning.style("background", "#00cc00");
+  buttonRunning.mousePressed(() => handsfree.stop());
 
-  buttonView = createButton("View on");
+  buttonView = createButton("View off");
   buttonView.mousePressed(starCameraView);
   buttonView.size(sizeButton[0], sizeButton[1]-20);
   buttonView.position(sizeButton[0], 5);
   buttonView.style("font-size: x-large");
+  buttonView.style("background", "#cc0000");
 
-  buttonTrack = createButton("track");
+  buttonTrack = createButton("Untrack");
   buttonTrack.mousePressed(startHandTracking);
   buttonTrack.size(sizeButton[0], sizeButton[1]-20);
   buttonTrack.position(sizeButton[0]*2, 5);
   buttonTrack.style("font-size: x-large");
+  buttonTrack.style("background", "#cc0000");
 
   sliderVelocity = createSlider(0, 1, 0.5, 0.01);
   sliderVelocity.position(sizeButton[0]*3+30, sizeButton[1]/2-15);
@@ -168,12 +173,12 @@ function updateView(){
     // resizeCanvas(windowWidth, windowHeight);
     resizeCanvas(windowWidth, orgHeight * (windowWidth/orgWidth)*0.9);
     sizeButton = [windowWidth/10, windowHeight/10];
-    buttonStart.size(sizeButton[0], sizeButton[1]-20);
-    buttonStart.position(0, 5);
-    buttonLoading.size(sizeButton[0], sizeButton[1]-20);
-    buttonLoading.position(0, 5);
     buttonStop.size(sizeButton[0], sizeButton[1]-20);
     buttonStop.position(0, 5);
+    buttonLoading.size(sizeButton[0], sizeButton[1]-20);
+    buttonLoading.position(0, 5);
+    buttonRunning.size(sizeButton[0], sizeButton[1]-20);
+    buttonRunning.position(0, 5);
     buttonView.size(sizeButton[0], sizeButton[1]-20);
     buttonView.position(sizeButton[0], 5);
     buttonTrack.size(sizeButton[0], sizeButton[1]-20);
@@ -186,18 +191,22 @@ function updateView(){
 
 function starCameraView(){
   if(onView){
-    buttonView.html("View on");
+    buttonView.html("View off");
+    buttonView.style("background", "#cc0000");
   }else{
-    buttonView.html("view off");
+    buttonView.html("view on");
+    buttonView.style("background", "#00cc00");
   }
   onView = !onView;
 }
 
 function startHandTracking(){
   if(onHandTracking){
-    buttonTrack.html("track");
+    buttonTrack.html("Untrack");
+    buttonTrack.style("background", "#cc0000");
   }else{
-    buttonTrack.html("untrack");
+    buttonTrack.html("Track");
+    buttonTrack.style("background", "#00cc00");
   }
   onHandTracking = !onHandTracking;
 }
