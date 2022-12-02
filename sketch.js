@@ -7,7 +7,6 @@ let videoDataLoaded = false;
 
 let buttonStop;
 let buttonLoading;
-let buttonStop;
 let buttonView;
 let buttonTrack;
 
