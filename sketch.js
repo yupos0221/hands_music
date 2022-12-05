@@ -85,7 +85,7 @@ function setup() {
   
   sizeButton = [windowWidth/10, windowHeight/10];
   textSize(20);
-  buttonStop = createButton('Start');
+  buttonStop = createButton('Stop');
   buttonStop.size(sizeButton[0], sizeButton[1]-20);
   buttonStop.position(0, 5);
   buttonStop.style("font-size: x-large");
@@ -102,7 +102,7 @@ function setup() {
   buttonLoading.style("background", "#cccc00");
 
   // Create a stop button
-  buttonRunning = createButton('Stop');
+  buttonRunning = createButton('Start');
   buttonRunning.size(sizeButton[0], sizeButton[1]-20);
   buttonRunning.position(0, 5);
   buttonRunning.style("font-size: x-large");
